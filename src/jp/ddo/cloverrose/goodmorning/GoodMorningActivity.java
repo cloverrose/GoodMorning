@@ -13,10 +13,8 @@ import android.util.Log;
 
 public class GoodMorningActivity extends Activity implements SensorEventListener {
     private SensorManager sensorManager;
-    private boolean mIsSensor;
     private double prev=-1;
 
-    /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +30,6 @@ public class GoodMorningActivity extends Activity implements SensorEventListener
         sensorManager.unregisterListener(this);
     }
 
-  //* onResume */
     @Override
     protected void onResume() {
         super.onResume();
@@ -43,10 +40,11 @@ public class GoodMorningActivity extends Activity implements SensorEventListener
         // センサマネージャへリスナーを登録
         if (sensors.size() > 0) {
             Sensor sensor = sensors.get(0);
-            mIsSensor = sensorManager.registerListener(this,
-                sensor,
-                SensorManager.SENSOR_DELAY_FASTEST);
-     
+            if(!sensorManager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_FASTEST)){
+                // device doesn't support this sensor
+                // TODO output error message
+            }
+            
             /*
              * int  SENSOR_DELAY_FASTEST    get sensor data as fast as possible
              * int  SENSOR_DELAY_GAME       rate suitable for games
